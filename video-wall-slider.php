@@ -66,7 +66,5 @@ register_deactivation_hook( __FILE__, function () {
 	VideoWallSlider\Core\Installer::deactivate();
 } );
 
-// Uninstall hook
-register_uninstall_hook( __FILE__, function () {
-	VideoWallSlider\Core\Installer::uninstall();
-} );
+// Uninstall hook - Must use static callback, not closure
+register_uninstall_hook( __FILE__, array( 'VideoWallSlider\Core\Installer', 'uninstall' ) );
