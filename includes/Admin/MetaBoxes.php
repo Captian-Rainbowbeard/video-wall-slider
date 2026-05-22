@@ -69,13 +69,13 @@ class MetaBoxes {
 		<div id="vws-videos-container" class="vws-videos-container">
 			<?php foreach ( $videos as $index => $video ) : ?>
 				<div class="vws-video-item" data-index="<?php echo esc_attr( $index ); ?>">
-					<input type="text" class="vws-video-url" placeholder="https://www.youtube.com/watch?v=..." value="<?php echo esc_attr( $video ); ?>" />
-					<button type="button" class="button vws-remove-video"><?php esc_html_e( 'Remove', 'video-wall-slider' ); ?></button>
 					<span class="vws-drag-handle">⋮⋮</span>
+					<input type="text" class="vws-video-url" name="vws_video_url[]" placeholder="https://www.youtube.com/watch?v=..." value="<?php echo esc_attr( $video ); ?>" />
+					<button type="button" class="button vws-remove-video"><?php esc_html_e( 'Remove', 'video-wall-slider' ); ?></button>
 				</div>
 			<?php endforeach; ?>
 		</div>
-		<button type="button" class="button button-secondary vws-add-video" id="vws-add-video"><?php esc_html_e( '+ Add Video', 'video-wall-slider' ); ?></button>
+		<button type="button" class="button button-secondary" id="vws-add-video"><?php esc_html_e( '+ Add Video', 'video-wall-slider' ); ?></button>
 		<?php
 	}
 
@@ -165,7 +165,7 @@ class MetaBoxes {
 	 * @return void
 	 */
 	public function render_shortcode_meta_box( $post ) {
-		$shortcode = '[video_wall id="' . $post->ID . '"]';
+		$shortcode = '[video_wall id="' . intval( $post->ID ) . '"]';
 		?>
 		<div class="vws-shortcode-box">
 			<input type="text" readonly="readonly" value="<?php echo esc_attr( $shortcode ); ?>" class="widefat" />
@@ -181,19 +181,21 @@ class MetaBoxes {
 	 * @return void
 	 */
 	public function save_meta_boxes( $post_id ) {
-		// Verify nonce
+		// Verify nonce for videos
 		if ( ! isset( $_POST['vws_videos_nonce'] ) || ! wp_verify_nonce( $_POST['vws_videos_nonce'], 'vws_save_videos' ) ) {
 			return;
 		}
 
 		// Sanitize and save videos
-		if ( isset( $_POST['vws_video_url'] ) ) {
+		if ( isset( $_POST['vws_video_url'] ) && is_array( $_POST['vws_video_url'] ) ) {
 			$videos = array_map( 'esc_url_raw', $_POST['vws_video_url'] );
 			$videos = array_filter( $videos );
 			update_post_meta( $post_id, '_vws_videos', $videos );
+		} else {
+			delete_post_meta( $post_id, '_vws_videos' );
 		}
 
-		// Verify settings nonce
+		// Verify nonce for settings
 		if ( ! isset( $_POST['vws_settings_nonce'] ) || ! wp_verify_nonce( $_POST['vws_settings_nonce'], 'vws_save_settings' ) ) {
 			return;
 		}
