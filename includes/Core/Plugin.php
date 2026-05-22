@@ -8,6 +8,13 @@
 
 namespace VideoWallSlider\Core;
 
+use VideoWallSlider\Admin\Menu;
+use VideoWallSlider\Admin\MetaBoxes;
+use VideoWallSlider\Admin\Enqueuer as AdminEnqueuer;
+use VideoWallSlider\Frontend\Enqueuer as FrontendEnqueuer;
+use VideoWallSlider\Frontend\Shortcode;
+use VideoWallSlider\REST\API;
+
 /**
  * Plugin main class
  */
@@ -51,19 +58,19 @@ class Plugin {
 
 		// Admin hooks
 		if ( is_admin() ) {
-			new Admin\Menu();
-			new Admin\MetaBoxes();
-			new Admin\Enqueuer();
+			new Menu();
+			new MetaBoxes();
+			new AdminEnqueuer();
 		}
 
 		// Frontend hooks
 		if ( ! is_admin() ) {
-			new Frontend\Enqueuer();
-			new Frontend\Shortcode();
+			new FrontendEnqueuer();
+			new Shortcode();
 		}
 
 		// REST API
-		new REST\API();
+		new API();
 	}
 
 	/**
