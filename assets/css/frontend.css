@@ -1,0 +1,176 @@
+/**
+ * Frontend Styles for Video Wall Slider
+ */
+
+:root {
+  --vws-columns: 4;
+  --vws-spacing: 10px;
+  --vws-radius: 8px;
+  --vws-hover: scale;
+}
+
+.vws-container {
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.vws-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.vws-scroller {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--vws-columns), 1fr);
+  gap: var(--vws-spacing);
+  padding: var(--vws-spacing);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding: 0;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar in Chrome, Safari, and Firefox */
+.vws-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.vws-slide {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  border-radius: var(--vws-radius);
+  overflow: hidden;
+  cursor: grab;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vws-slide:active {
+  cursor: grabbing;
+}
+
+/* Hover Effects */
+.vws-slide[data-hover='scale']:hover,
+.vws-scroller:not(.is-dragging) .vws-slide:hover {
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+.vws-slide[data-hover='overlay']::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.vws-scroller:not(.is-dragging) .vws-slide[data-hover='overlay']:hover::before {
+  opacity: 1;
+}
+
+.vws-video-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vws-video-iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  display: block;
+  object-fit: cover;
+}
+
+/* Loading State */
+.vws-slide.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: vws-spin 0.8s linear infinite;
+  z-index: 10;
+}
+
+@keyframes vws-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  :root {
+    --vws-columns: 3;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --vws-columns: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --vws-columns: 1;
+  }
+
+  .vws-container {
+    height: 100dvh;
+  }
+
+  .vws-slide {
+    aspect-ratio: 9 / 16;
+  }
+}
+
+/* Touch Optimization */
+@supports (scroll-behavior: smooth) {
+  .vws-scroller {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .vws-slide,
+  .vws-scroller {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .vws-slide:hover {
+    transform: none !important;
+  }
+}

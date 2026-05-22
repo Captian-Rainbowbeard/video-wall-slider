@@ -1,0 +1,21 @@
+{
+  "name": "video-wall-slider",
+  "version": "1.0.0",
+  "description": "A modern WordPress plugin for TikTok/Instagram Reels-style video walls",
+  "main": "assets/js/frontend.js",
+  "scripts": {
+    "build": "echo 'Build script placeholder'",
+    "dev": "echo 'Dev script placeholder'"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "video",
+    "slider",
+    "youtube",
+    "tiktok",
+    "reels"
+  ],
+  "author": "Captian Rainbowbeard",
+  "license": "GPL-2.0+"
+}

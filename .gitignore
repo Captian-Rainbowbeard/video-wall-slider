@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+composer.lock
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# Cache
+/cache/
+/uploads/
+
+# Environment
+.env
+.env.local
